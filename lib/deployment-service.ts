@@ -14,7 +14,7 @@ export class DeploymentService extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const hostingBucket = new aws_s3.Bucket(this, "FrontendBucket2", {
+    const hostingBucket = new aws_s3.Bucket(this, "FrontendBucket", {
       blockPublicAccess: aws_s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
@@ -22,7 +22,7 @@ export class DeploymentService extends Construct {
 
     const distribution = new aws_cloudfront.Distribution(
       this,
-      "CloudfrontDistribution2",
+      "CloudfrontDistribution",
       {
         defaultBehavior: {
           origin:
@@ -43,20 +43,20 @@ export class DeploymentService extends Construct {
       }
     );
 
-    new aws_s3_deployment.BucketDeployment(this, "BucketDeployment2", {
+    new aws_s3_deployment.BucketDeployment(this, "BucketDeployment", {
       sources: [aws_s3_deployment.Source.asset(path)],
       destinationBucket: hostingBucket,
       distribution,
       distributionPaths: ["/*"],
     });
 
-    new CfnOutput(this, "CloudFrontURL2", {
+    new CfnOutput(this, "CloudFrontURL", {
       value: distribution.domainName,
       description: "The distribution URL",
       exportName: "CloudfrontURL",
     });
 
-    new CfnOutput(this, "BucketName2", {
+    new CfnOutput(this, "BucketName", {
       value: hostingBucket.bucketName,
       description: "The name of the S3 bucket",
       exportName: "BucketName",
