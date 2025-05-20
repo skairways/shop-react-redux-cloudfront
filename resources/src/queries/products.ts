@@ -16,6 +16,21 @@ export function useAvailableProducts() {
   );
 }
 
+export function useImportProducts() {
+  return useQuery<AvailableProduct[], AxiosError>(
+    "import-products",
+    async () => {
+      const res = await axios.get<AvailableProduct[]>(
+        `${API_PATHS.import}/import`,
+        {
+          params: { name: "products2.csv" },
+        }
+      );
+      return res.data;
+    }
+  );
+}
+
 export function useInvalidateAvailableProducts() {
   const queryClient = useQueryClient();
   return React.useCallback(
