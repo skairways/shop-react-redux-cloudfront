@@ -7,13 +7,18 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useImportProducts } from "~/queries/products";
 
+const authorization_token = localStorage.getItem("authorization_token") ?? "";
+const basicAuth = `Basic ${btoa(authorization_token)}`;
+
 export default function PageProductImport() {
-  const { data } = useImportProducts();
-  console.log(data);
+  const {} = useImportProducts();
   const handleDownload = async () => {
     try {
       const response = await axios.get(`${API_PATHS.import}/import`, {
         params: { name: "products2.csv" },
+        headers: {
+          Authorization: basicAuth,
+        },
       });
       const signedUrl = response.data;
       if (signedUrl) {
